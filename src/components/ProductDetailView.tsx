@@ -1,4 +1,4 @@
-import { ArrowLeft, MessageCircle, Package, BadgeCheck, Clock, Tag, Boxes, ShoppingCart } from "lucide-react";
+import { ArrowLeft, MessageCircle, BadgeCheck, Clock, Tag, Boxes, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -30,16 +30,20 @@ const ProductDetailView = ({ product, onBack }: ProductDetailViewProps) => {
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Product Header */}
-          <div className="bg-card rounded-2xl border border-border p-6 md:p-8">
-            <div className="flex flex-col md:flex-row md:items-start gap-6">
-              {/* Product Icon */}
-              <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-gradient-to-br from-secondary to-secondary/50 flex items-center justify-center shrink-0">
-                <Package className="h-12 w-12 md:h-16 md:w-16 text-primary" />
+          {/* Product Header with Image */}
+          <div className="bg-card rounded-2xl border border-border overflow-hidden">
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Product Image */}
+              <div className="aspect-square bg-secondary/30">
+                <img
+                  src={product.gambar}
+                  alt={product.nama}
+                  className="w-full h-full object-cover"
+                />
               </div>
 
               {/* Product Info */}
-              <div className="flex-1">
+              <div className="p-6 flex flex-col justify-center">
                 <div className="flex flex-wrap items-center gap-2 mb-3">
                   <span className="text-sm font-mono text-muted-foreground bg-muted px-3 py-1 rounded-full">
                     {product.kode}
@@ -70,7 +74,7 @@ const ProductDetailView = ({ product, onBack }: ProductDetailViewProps) => {
                 </div>
 
                 {/* Price Range */}
-                <div className="flex items-baseline gap-2">
+                <div className="flex items-baseline gap-2 mb-4">
                   <span className="text-2xl md:text-3xl font-bold text-primary">
                     {formatPrice(lowestPrice)}
                   </span>
@@ -83,6 +87,18 @@ const ProductDetailView = ({ product, onBack }: ProductDetailViewProps) => {
                     </>
                   )}
                 </div>
+
+                {/* Quick Order Button - Mobile */}
+                <Button
+                  asChild
+                  size="lg"
+                  className="md:hidden bg-green-600 hover:bg-green-700 text-white gap-2"
+                >
+                  <a href={generateWhatsAppLink(product)} target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="h-5 w-5" />
+                    Pesan via WhatsApp
+                  </a>
+                </Button>
               </div>
             </div>
           </div>
@@ -191,10 +207,19 @@ const ProductDetailView = ({ product, onBack }: ProductDetailViewProps) => {
                 Pesan Sekarang
               </h3>
 
-              <div className="space-y-4 mb-6">
+              {/* Product Thumbnail */}
+              <div className="aspect-square rounded-lg overflow-hidden bg-secondary/30 mb-4">
+                <img
+                  src={product.gambar}
+                  alt={product.nama}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Produk</span>
-                  <span className="font-medium">{product.nama}</span>
+                  <span className="font-medium text-right max-w-[60%]">{product.nama}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Kode</span>

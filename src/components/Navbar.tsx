@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X, MessageCircle, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { generateWhatsAppLink } from "@/data/products";
@@ -9,6 +10,7 @@ interface NavbarProps {
 }
 
 const Navbar = ({ isDark, toggleDark }: NavbarProps) => {
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -21,11 +23,54 @@ const Navbar = ({ isDark, toggleDark }: NavbarProps) => {
   }, []);
 
   const navLinks = [
-    { name: "Produk", href: "#produk" },
-    { name: "Pricelist", href: "#pricelist" },
-    { name: "Tentang", href: "#tentang" },
-    { name: "Kontak", href: "#kontak" },
+    { name: "Produk", href: "/produk", isRoute: true },
+    { name: "Pricelist", href: "#pricelist", isRoute: false },
+    { name: "Tentang", href: "#tentang", isRoute: false },
+    { name: "Kontak", href: "#kontak", isRoute: false },
   ];
+
+  const renderNavLink = (link: typeof navLinks[0], mobile: boolean = false) => {
+    const baseClass = mobile
+      ? "py-3 px-4 text-foreground/80 hover:text-primary hover:bg-secondary/50 rounded-lg transition-colors font-medium"
+      : "text-foreground/80 hover:text-primary transition-colors font-medium";
+
+    if (link.isRoute) {
+      return (
+        <Link
+          key={link.name}
+          to={link.href}
+          onClick={mobile ? () => setIsMobileMenuOpen(false) : undefined}
+          className={baseClass}
+        >
+          {link.name}
+        </Link>
+      );
+    }
+
+    if (location.pathname === "/") {
+      return (
+        <a
+          key={link.name}
+          href={link.href}
+          onClick={mobile ? () => setIsMobileMenuOpen(false) : undefined}
+          className={baseClass}
+        >
+          {link.name}
+        </a>
+      );
+    }
+
+    return (
+      <Link
+        key={link.name}
+        to={`/${link.href}`}
+        onClick={mobile ? () => setIsMobileMenuOpen(false) : undefined}
+        className={baseClass}
+      >
+        {link.name}
+      </Link>
+    );
+  };
 
   return (
     <nav
@@ -38,23 +83,15 @@ const Navbar = ({ isDark, toggleDark }: NavbarProps) => {
       <div className="container-custom">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <span className="font-display text-2xl md:text-3xl font-bold text-primary">
               ALCHO
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-foreground/80 hover:text-primary transition-colors font-medium"
-              >
-                {link.name}
-              </a>
-            ))}
+            {navLinks.map((link) => renderNavLink(link, false))}
           </div>
 
           {/* Desktop Actions */}
@@ -106,16 +143,7 @@ const Navbar = ({ isDark, toggleDark }: NavbarProps) => {
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-background/98 backdrop-blur-lg border-b border-border animate-fade-in">
             <div className="container-custom py-4 flex flex-col gap-2">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="py-3 px-4 text-foreground/80 hover:text-primary hover:bg-secondary/50 rounded-lg transition-colors font-medium"
-                >
-                  {link.name}
-                </a>
-              ))}
+              {navLinks.map((link) => renderNavLink(link, true))}
               <Button
                 asChild
                 className="mt-2 bg-green-600 hover:bg-green-700 text-white gap-2"

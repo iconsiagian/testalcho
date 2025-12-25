@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import CartDrawer from "@/components/CartDrawer";
 import ProductCard from "@/components/ProductCard";
 import ProductFilters, { DesktopFilterSidebar, SortOption } from "@/components/ProductFilters";
 import ProductDetailView from "@/components/ProductDetailView";
@@ -238,6 +239,7 @@ const ProductsPage = () => {
         </main>
 
         <Footer />
+        <CartDrawer />
         <WhatsAppButton />
       </div>
     </>

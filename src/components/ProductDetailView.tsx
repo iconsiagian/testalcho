@@ -1,9 +1,12 @@
-import { ArrowLeft, MessageCircle, BadgeCheck, Clock, Tag, Boxes, ShoppingCart } from "lucide-react";
+import { useState } from "react";
+import { ArrowLeft, MessageCircle, BadgeCheck, Clock, Tag, Boxes, ShoppingCart, Check, Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card } from "@/components/ui/card";
-import { Product, formatPrice, generateWhatsAppLink } from "@/data/products";
+import { Product, ProductVariant, formatPrice, generateWhatsAppLink } from "@/data/products";
+import { useCart } from "@/contexts/CartContext";
+import { useToast } from "@/hooks/use-toast";
 
 interface ProductDetailViewProps {
   product: Product;
@@ -11,9 +14,24 @@ interface ProductDetailViewProps {
 }
 
 const ProductDetailView = ({ product, onBack }: ProductDetailViewProps) => {
+  const { addItem, isInCart } = useCart();
+  const { toast } = useToast();
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(product.varian[0]);
+  const [quantity, setQuantity] = useState(1);
+
   const isApproved = product.izin === "P-IRT";
   const lowestPrice = Math.min(...product.varian.map((v) => v.hargaSatuan));
   const highestPrice = Math.max(...product.varian.map((v) => v.hargaSatuan));
+  const inCart = isInCart(product.kode, selectedVariant.pack);
+
+  const handleAddToCart = () => {
+    addItem(product, selectedVariant, quantity);
+    toast({
+      title: "Ditambahkan ke keranjang",
+      description: `${product.nama} (${selectedVariant.pack}) x${quantity}`,
+    });
+    setQuantity(1);
+  };
 
   return (
     <div className="animate-fade-in">
@@ -119,19 +137,25 @@ const ProductDetailView = ({ product, onBack }: ProductDetailViewProps) => {
                     <TableHead className="font-semibold text-right">Harga Satuan</TableHead>
                     <TableHead className="font-semibold text-right">Harga Karton</TableHead>
                     <TableHead className="font-semibold text-right">Hemat/Unit</TableHead>
-                    <TableHead className="w-[100px]"></TableHead>
+                    <TableHead className="w-[120px]"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {product.varian.map((v, index) => {
-                    // Calculate savings per unit when buying carton
                     const unitsPerCarton = Math.round(v.hargaKarton / v.hargaSatuan);
                     const pricePerUnitCarton = v.hargaKarton / unitsPerCarton;
                     const savings = v.hargaSatuan - pricePerUnitCarton;
                     const savingsPercent = Math.round((savings / v.hargaSatuan) * 100);
+                    const variantInCart = isInCart(product.kode, v.pack);
 
                     return (
-                      <TableRow key={index} className="group">
+                      <TableRow 
+                        key={index} 
+                        className={`group cursor-pointer hover:bg-secondary/30 ${
+                          selectedVariant.pack === v.pack ? "bg-primary/5" : ""
+                        }`}
+                        onClick={() => setSelectedVariant(v)}
+                      >
                         <TableCell>
                           <div className="font-medium">{v.pack}</div>
                           <div className="text-xs text-muted-foreground">
@@ -155,18 +179,26 @@ const ProductDetailView = ({ product, onBack }: ProductDetailViewProps) => {
                         </TableCell>
                         <TableCell>
                           <Button
-                            asChild
                             size="sm"
-                            variant="outline"
-                            className="opacity-0 group-hover:opacity-100 transition-opacity"
+                            variant={variantInCart ? "default" : "outline"}
+                            className={`gap-1 ${variantInCart ? "bg-green-600 hover:bg-green-700" : ""}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              addItem(product, v);
+                              toast({
+                                title: "Ditambahkan ke keranjang",
+                                description: `${product.nama} (${v.pack})`,
+                              });
+                            }}
                           >
-                            <a
-                              href={generateWhatsAppLink(product)}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              Pesan
-                            </a>
+                            {variantInCart ? (
+                              <Check className="h-4 w-4" />
+                            ) : (
+                              <ShoppingCart className="h-4 w-4" />
+                            )}
+                            <span className="hidden sm:inline">
+                              {variantInCart ? "Tambah" : "Keranjang"}
+                            </span>
                           </Button>
                         </TableCell>
                       </TableRow>
@@ -204,7 +236,7 @@ const ProductDetailView = ({ product, onBack }: ProductDetailViewProps) => {
             <Card className="p-6 bg-card border-border">
               <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                 <ShoppingCart className="h-5 w-5 text-primary" />
-                Pesan Sekarang
+                Tambah ke Keranjang
               </h3>
 
               {/* Product Thumbnail */}
@@ -216,38 +248,93 @@ const ProductDetailView = ({ product, onBack }: ProductDetailViewProps) => {
                 />
               </div>
 
-              <div className="space-y-3 mb-6">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Produk</span>
-                  <span className="font-medium text-right max-w-[60%]">{product.nama}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Kode</span>
-                  <span className="font-mono">{product.kode}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Varian</span>
-                  <span>{product.varian.length} pilihan</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Mulai dari</span>
-                  <span className="font-semibold text-primary">{formatPrice(lowestPrice)}</span>
+              {/* Variant Selection */}
+              <div className="mb-4">
+                <label className="text-sm font-medium text-foreground mb-2 block">Pilih Varian</label>
+                <div className="grid grid-cols-1 gap-2">
+                  {product.varian.map((v) => (
+                    <button
+                      key={v.pack}
+                      onClick={() => setSelectedVariant(v)}
+                      className={`p-3 rounded-lg border text-left transition-all ${
+                        selectedVariant.pack === v.pack
+                          ? "border-primary bg-primary/10"
+                          : "border-border hover:border-primary/50"
+                      }`}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium text-sm">{v.pack}</span>
+                        <span className="font-semibold text-primary">{formatPrice(v.hargaSatuan)}</span>
+                      </div>
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              <Button
-                asChild
-                size="lg"
-                className="w-full bg-green-600 hover:bg-green-700 text-white gap-2 mb-3"
-              >
-                <a href={generateWhatsAppLink(product)} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="h-5 w-5" />
-                  Pesan via WhatsApp
-                </a>
-              </Button>
+              {/* Quantity */}
+              <div className="mb-4">
+                <label className="text-sm font-medium text-foreground mb-2 block">Jumlah</label>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  >
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                  <span className="flex-1 text-center font-semibold text-lg">{quantity}</span>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setQuantity(quantity + 1)}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
 
-              <p className="text-xs text-muted-foreground text-center">
-                Klik untuk chat dengan admin. Detail produk sudah terisi otomatis.
+              {/* Subtotal */}
+              <div className="flex justify-between items-center py-3 border-t border-border mb-4">
+                <span className="text-muted-foreground">Subtotal</span>
+                <span className="text-xl font-bold text-primary">
+                  {formatPrice(selectedVariant.hargaSatuan * quantity)}
+                </span>
+              </div>
+
+              <div className="space-y-2">
+                <Button
+                  size="lg"
+                  className={`w-full gap-2 ${inCart ? "bg-green-600 hover:bg-green-700" : ""}`}
+                  onClick={handleAddToCart}
+                >
+                  {inCart ? (
+                    <>
+                      <Check className="h-5 w-5" />
+                      Tambah Lagi
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="h-5 w-5" />
+                      Tambah ke Keranjang
+                    </>
+                  )}
+                </Button>
+
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="w-full gap-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
+                >
+                  <a href={generateWhatsAppLink(product)} target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="h-5 w-5" />
+                    Pesan Langsung
+                  </a>
+                </Button>
+              </div>
+
+              <p className="text-xs text-muted-foreground text-center mt-3">
+                Klik keranjang untuk melihat semua pesanan Anda
               </p>
             </Card>
 

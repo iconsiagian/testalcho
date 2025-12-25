@@ -1,4 +1,4 @@
-import { Package, BadgeCheck, Clock } from "lucide-react";
+import { BadgeCheck, Clock } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Product, formatPrice } from "@/data/products";
@@ -20,22 +20,20 @@ const ProductCard = ({ product, onClick, index }: ProductCardProps) => {
       style={{ animationDelay: `${index * 0.05}s` }}
     >
       {/* Top accent line */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity" />
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity z-10" />
 
-      <div className="p-5">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-3 mb-4">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
-              <Package className="h-5 w-5 text-primary" />
-            </div>
-            <span className="text-xs font-mono text-muted-foreground bg-muted px-2 py-1 rounded">
-              {product.kode}
-            </span>
-          </div>
+      {/* Product Image */}
+      <div className="relative aspect-square overflow-hidden bg-secondary/30">
+        <img
+          src={product.gambar}
+          alt={product.nama}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+        {/* Category Badge */}
+        <div className="absolute top-3 left-3">
           <Badge
             variant={isApproved ? "default" : "secondary"}
-            className={`text-xs ${
+            className={`text-xs shadow-sm ${
               isApproved
                 ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
                 : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
@@ -49,26 +47,35 @@ const ProductCard = ({ product, onClick, index }: ProductCardProps) => {
             {product.izin}
           </Badge>
         </div>
+      </div>
+
+      <div className="p-4">
+        {/* Product Code */}
+        <span className="text-xs font-mono text-muted-foreground bg-muted px-2 py-0.5 rounded">
+          {product.kode}
+        </span>
 
         {/* Product Name */}
-        <h3 className="font-display text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-2">
+        <h3 className="font-display text-lg font-semibold text-foreground mt-2 mb-1 group-hover:text-primary transition-colors line-clamp-2">
           {product.nama}
         </h3>
 
         {/* Category */}
-        <p className="text-sm text-muted-foreground mb-4">{product.kategori}</p>
+        <p className="text-sm text-muted-foreground mb-3">{product.kategori}</p>
 
         {/* Main Variant & Price */}
-        <div className="flex items-end justify-between pt-4 border-t border-border/50">
+        <div className="flex items-end justify-between pt-3 border-t border-border/50">
           <div>
-            <p className="text-xs text-muted-foreground mb-1">{mainVariant.pack}</p>
+            <p className="text-xs text-muted-foreground mb-0.5">{mainVariant.pack}</p>
             <p className="text-lg font-bold text-primary">
               {formatPrice(mainVariant.hargaSatuan)}
             </p>
           </div>
-          <span className="text-xs text-muted-foreground">
-            +{product.varian.length - 1} varian lain
-          </span>
+          {product.varian.length > 1 && (
+            <span className="text-xs text-muted-foreground bg-secondary px-2 py-1 rounded-full">
+              +{product.varian.length - 1} varian
+            </span>
+          )}
         </div>
       </div>
     </Card>

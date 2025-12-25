@@ -1,3 +1,17 @@
+// Product images
+import sausTomat from "@/assets/products/saus-tomat.png";
+import sambalPedas from "@/assets/products/sambal-pedas.png";
+import bumbuNasiGoreng from "@/assets/products/bumbu-nasi-goreng.png";
+import sausTiram from "@/assets/products/saus-tiram.png";
+import sambalMatah from "@/assets/products/sambal-matah.png";
+import bumbuRendang from "@/assets/products/bumbu-rendang.png";
+import sausBbq from "@/assets/products/saus-bbq.png";
+import sambalBajak from "@/assets/products/sambal-bajak.png";
+import bumbuGulai from "@/assets/products/bumbu-gulai.png";
+import sausTeriyaki from "@/assets/products/saus-teriyaki.png";
+import bumbuSoto from "@/assets/products/bumbu-soto.png";
+import sausCabaiManis from "@/assets/products/saus-cabai-manis.png";
+
 export interface ProductVariant {
   pack: string;
   hargaSatuan: number;
@@ -9,6 +23,7 @@ export interface Product {
   nama: string;
   kategori: string;
   izin: string;
+  gambar: string;
   varian: ProductVariant[];
 }
 
@@ -18,6 +33,7 @@ export const products: Product[] = [
     nama: "Saus Tomat Premium",
     kategori: "Sauce",
     izin: "P-IRT",
+    gambar: sausTomat,
     varian: [
       { pack: "250ml Botol", hargaSatuan: 15000, hargaKarton: 165000 },
       { pack: "500ml Botol", hargaSatuan: 27000, hargaKarton: 297000 },
@@ -29,6 +45,7 @@ export const products: Product[] = [
     nama: "Saus Sambal Extra Pedas",
     kategori: "Sambal & Saus Pedas",
     izin: "P-IRT",
+    gambar: sambalPedas,
     varian: [
       { pack: "250ml Botol", hargaSatuan: 18000, hargaKarton: 198000 },
       { pack: "500ml Botol", hargaSatuan: 32000, hargaKarton: 352000 }
@@ -39,6 +56,7 @@ export const products: Product[] = [
     nama: "Bumbu Nasi Goreng Spesial",
     kategori: "Bumbu & Seasoning",
     izin: "P-IRT",
+    gambar: bumbuNasiGoreng,
     varian: [
       { pack: "50g Sachet", hargaSatuan: 5000, hargaKarton: 110000 },
       { pack: "250g Pouch", hargaSatuan: 22000, hargaKarton: 242000 },
@@ -50,6 +68,7 @@ export const products: Product[] = [
     nama: "Saus Tiram Premium",
     kategori: "Sauce",
     izin: "P-IRT",
+    gambar: sausTiram,
     varian: [
       { pack: "300ml Botol", hargaSatuan: 25000, hargaKarton: 275000 },
       { pack: "600ml Botol", hargaSatuan: 45000, hargaKarton: 495000 }
@@ -60,6 +79,7 @@ export const products: Product[] = [
     nama: "Sambal Matah Ready",
     kategori: "Sambal & Saus Pedas",
     izin: "SEDANG PROSES",
+    gambar: sambalMatah,
     varian: [
       { pack: "200g Jar", hargaSatuan: 28000, hargaKarton: 308000 },
       { pack: "500g Jar", hargaSatuan: 62000, hargaKarton: 682000 }
@@ -70,6 +90,7 @@ export const products: Product[] = [
     nama: "Bumbu Rendang Instan",
     kategori: "Bumbu & Seasoning",
     izin: "P-IRT",
+    gambar: bumbuRendang,
     varian: [
       { pack: "100g Sachet", hargaSatuan: 12000, hargaKarton: 132000 },
       { pack: "500g Pouch", hargaSatuan: 52000, hargaKarton: 572000 }
@@ -80,6 +101,7 @@ export const products: Product[] = [
     nama: "Saus BBQ Smoky",
     kategori: "Sauce",
     izin: "P-IRT",
+    gambar: sausBbq,
     varian: [
       { pack: "250ml Botol", hargaSatuan: 20000, hargaKarton: 220000 },
       { pack: "500ml Botol", hargaSatuan: 36000, hargaKarton: 396000 },
@@ -91,6 +113,7 @@ export const products: Product[] = [
     nama: "Sambal Bajak Tradisional",
     kategori: "Sambal & Saus Pedas",
     izin: "P-IRT",
+    gambar: sambalBajak,
     varian: [
       { pack: "200g Jar", hargaSatuan: 24000, hargaKarton: 264000 },
       { pack: "500g Jar", hargaSatuan: 55000, hargaKarton: 605000 }
@@ -101,6 +124,7 @@ export const products: Product[] = [
     nama: "Bumbu Gulai Padang",
     kategori: "Bumbu & Seasoning",
     izin: "P-IRT",
+    gambar: bumbuGulai,
     varian: [
       { pack: "100g Sachet", hargaSatuan: 14000, hargaKarton: 154000 },
       { pack: "500g Pouch", hargaSatuan: 62000, hargaKarton: 682000 }
@@ -111,6 +135,7 @@ export const products: Product[] = [
     nama: "Saus Teriyaki Jepang",
     kategori: "Sauce",
     izin: "SEDANG PROSES",
+    gambar: sausTeriyaki,
     varian: [
       { pack: "300ml Botol", hargaSatuan: 28000, hargaKarton: 308000 },
       { pack: "600ml Botol", hargaSatuan: 50000, hargaKarton: 550000 }
@@ -121,6 +146,7 @@ export const products: Product[] = [
     nama: "Bumbu Soto Ayam",
     kategori: "Bumbu & Seasoning",
     izin: "P-IRT",
+    gambar: bumbuSoto,
     varian: [
       { pack: "50g Sachet", hargaSatuan: 6000, hargaKarton: 132000 },
       { pack: "250g Pouch", hargaSatuan: 26000, hargaKarton: 286000 }
@@ -131,6 +157,7 @@ export const products: Product[] = [
     nama: "Saus Cabai Manis",
     kategori: "Sambal & Saus Pedas",
     izin: "P-IRT",
+    gambar: sausCabaiManis,
     varian: [
       { pack: "250ml Botol", hargaSatuan: 16000, hargaKarton: 176000 },
       { pack: "500ml Botol", hargaSatuan: 29000, hargaKarton: 319000 }

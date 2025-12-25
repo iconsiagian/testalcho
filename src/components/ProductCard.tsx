@@ -1,7 +1,11 @@
-import { BadgeCheck, Clock } from "lucide-react";
+import { useState } from "react";
+import { BadgeCheck, Clock, ShoppingCart, Check } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Product, formatPrice } from "@/data/products";
+import { useCart } from "@/contexts/CartContext";
+import { useToast } from "@/hooks/use-toast";
 
 interface ProductCardProps {
   product: Product;
@@ -12,6 +16,24 @@ interface ProductCardProps {
 const ProductCard = ({ product, onClick, index }: ProductCardProps) => {
   const mainVariant = product.varian[0];
   const isApproved = product.izin === "P-IRT";
+  const { addItem, isInCart } = useCart();
+  const { toast } = useToast();
+  const [justAdded, setJustAdded] = useState(false);
+
+  const inCart = isInCart(product.kode, mainVariant.pack);
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    addItem(product, mainVariant);
+    setJustAdded(true);
+    
+    toast({
+      title: "Ditambahkan ke keranjang",
+      description: `${product.nama} (${mainVariant.pack})`,
+    });
+
+    setTimeout(() => setJustAdded(false), 2000);
+  };
 
   return (
     <Card
@@ -46,6 +68,31 @@ const ProductCard = ({ product, onClick, index }: ProductCardProps) => {
             )}
             {product.izin}
           </Badge>
+        </div>
+
+        {/* Quick Add Button */}
+        <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+          <Button
+            size="sm"
+            className={`shadow-lg gap-1.5 ${
+              justAdded || inCart
+                ? "bg-green-600 hover:bg-green-700"
+                : "bg-primary hover:bg-primary/90"
+            }`}
+            onClick={handleAddToCart}
+          >
+            {justAdded || inCart ? (
+              <>
+                <Check className="h-4 w-4" />
+                {justAdded ? "Ditambahkan" : "Di Keranjang"}
+              </>
+            ) : (
+              <>
+                <ShoppingCart className="h-4 w-4" />
+                Tambah
+              </>
+            )}
+          </Button>
         </div>
       </div>
 

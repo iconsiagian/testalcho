@@ -8,6 +8,7 @@ import AboutSection from "@/components/AboutSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import CartDrawer from "@/components/CartDrawer";
 
 const Index = () => {
   const [isDark, setIsDark] = useState(false);
@@ -63,6 +64,7 @@ const Index = () => {
         </main>
 
         <Footer />
+        <CartDrawer />
         <WhatsAppButton />
       </div>
     </>

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import ProductSection from "@/components/ProductSection";
+import ProductPreview from "@/components/ProductPreview";
 import PricelistSection from "@/components/PricelistSection";
 import AboutSection from "@/components/AboutSection";
 import ContactSection from "@/components/ContactSection";
@@ -56,7 +56,7 @@ const Index = () => {
         
         <main>
           <Hero />
-          <ProductSection />
+          <ProductPreview />
           <PricelistSection />
           <AboutSection />
           <ContactSection />

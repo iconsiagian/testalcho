@@ -2,8 +2,20 @@ import { ArrowRight, MessageCircle, ChefHat, Award, Sparkles } from "lucide-reac
 import { Button } from "@/components/ui/button";
 import { generateWhatsAppLink } from "@/data/products";
 import heroBanner from "@/assets/hero-banner.png";
+import { useEffect, useState } from "react";
 
 const Hero = () => {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const features = [
     { icon: ChefHat, text: "Kualitas Premium" },
     { icon: Award, text: "Rasa Konsisten" },
@@ -12,15 +24,40 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/30" />
-      <div className="absolute top-1/4 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 left-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl" />
+      {/* Parallax Background Elements */}
+      <div 
+        className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/30"
+        style={{ transform: `translateY(${scrollY * 0.1}px)` }}
+      />
+      <div 
+        className="absolute top-1/4 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl transition-transform duration-100"
+        style={{ transform: `translate(${scrollY * 0.15}px, ${scrollY * -0.1}px)` }}
+      />
+      <div 
+        className="absolute bottom-1/4 left-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl transition-transform duration-100"
+        style={{ transform: `translate(${scrollY * -0.1}px, ${scrollY * 0.15}px)` }}
+      />
+      {/* Additional parallax decorative elements */}
+      <div 
+        className="absolute top-1/3 left-1/4 w-4 h-4 bg-primary/30 rounded-full"
+        style={{ transform: `translateY(${scrollY * -0.3}px)` }}
+      />
+      <div 
+        className="absolute top-1/2 right-1/3 w-3 h-3 bg-accent/40 rounded-full"
+        style={{ transform: `translateY(${scrollY * -0.4}px)` }}
+      />
+      <div 
+        className="absolute bottom-1/3 right-1/4 w-5 h-5 bg-primary/20 rounded-full"
+        style={{ transform: `translateY(${scrollY * -0.25}px)` }}
+      />
 
       <div className="container-custom relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Text Content */}
-          <div className="text-center lg:text-left">
+          {/* Text Content with subtle parallax */}
+          <div 
+            className="text-center lg:text-left"
+            style={{ transform: `translateY(${scrollY * 0.05}px)`, opacity: Math.max(0, 1 - scrollY * 0.001) }}
+          >
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/80 rounded-full mb-8 animate-fade-in-up">
               <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
@@ -82,15 +119,27 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Hero Image */}
-          <div className="relative animate-fade-in-up stagger-2 hidden lg:block">
+          {/* Hero Image with parallax */}
+          <div 
+            className="relative animate-fade-in-up stagger-2 hidden lg:block"
+            style={{ transform: `translateY(${scrollY * -0.08}px)` }}
+          >
             <div className="relative">
-              {/* Decorative elements */}
-              <div className="absolute -top-4 -left-4 w-24 h-24 bg-primary/20 rounded-full blur-2xl" />
-              <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-accent/20 rounded-full blur-2xl" />
+              {/* Decorative elements with enhanced parallax */}
+              <div 
+                className="absolute -top-4 -left-4 w-24 h-24 bg-primary/20 rounded-full blur-2xl"
+                style={{ transform: `translate(${scrollY * -0.12}px, ${scrollY * -0.15}px)` }}
+              />
+              <div 
+                className="absolute -bottom-4 -right-4 w-32 h-32 bg-accent/20 rounded-full blur-2xl"
+                style={{ transform: `translate(${scrollY * 0.1}px, ${scrollY * 0.12}px)` }}
+              />
               
-              {/* Main image */}
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-border/20">
+              {/* Main image with subtle scale on scroll */}
+              <div 
+                className="relative rounded-3xl overflow-hidden shadow-2xl border border-border/20 transition-transform duration-300"
+                style={{ transform: `scale(${1 + scrollY * 0.0001})` }}
+              >
                 <img
                   src={heroBanner}
                   alt="Premium bumbu dan saus ALCHO - berbagai rempah dan produk saus berkualitas tinggi"
@@ -100,8 +149,11 @@ const Hero = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" />
               </div>
 
-              {/* Floating badge */}
-              <div className="absolute -bottom-6 -left-6 bg-card px-6 py-4 rounded-2xl shadow-xl border border-border/50 animate-float">
+              {/* Floating badge with parallax */}
+              <div 
+                className="absolute -bottom-6 -left-6 bg-card px-6 py-4 rounded-2xl shadow-xl border border-border/50 animate-float"
+                style={{ transform: `translateY(${scrollY * -0.2}px)` }}
+              >
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
                     <Award className="w-6 h-6 text-primary" />
@@ -113,8 +165,14 @@ const Hero = () => {
                 </div>
               </div>
 
-              {/* Floating badge right */}
-              <div className="absolute -top-6 -right-6 bg-card px-6 py-4 rounded-2xl shadow-xl border border-border/50 animate-float" style={{ animationDelay: "1s" }}>
+              {/* Floating badge right with parallax */}
+              <div 
+                className="absolute -top-6 -right-6 bg-card px-6 py-4 rounded-2xl shadow-xl border border-border/50 animate-float"
+                style={{ 
+                  animationDelay: "1s",
+                  transform: `translateY(${scrollY * -0.25}px)`
+                }}
+              >
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
                     <Sparkles className="w-6 h-6 text-accent" />
@@ -130,8 +188,11 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-float">
+      {/* Scroll Indicator with fade out on scroll */}
+      <div 
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-float transition-opacity duration-300"
+        style={{ opacity: Math.max(0, 1 - scrollY * 0.005) }}
+      >
         <div className="w-6 h-10 border-2 border-muted-foreground/30 rounded-full flex justify-center pt-2">
           <div className="w-1.5 h-3 bg-muted-foreground/50 rounded-full animate-pulse" />
         </div>

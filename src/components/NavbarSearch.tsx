@@ -116,7 +116,7 @@ const NavbarSearch = ({ onClose, isMobile = false }: NavbarSearchProps) => {
 
       {/* Autocomplete Dropdown */}
       {isOpen && suggestions.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
+        <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden animate-fade-in">
           <ul className="py-1">
           {suggestions.map((product, index) => {
               const highlightText = (text: string) => {

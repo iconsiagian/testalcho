@@ -77,7 +77,7 @@ const Navbar = ({ isDark, toggleDark }: NavbarProps) => {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
         isScrolled
-          ? "bg-background/70 backdrop-blur-xl shadow-lg border-b border-border/30"
+          ? "bg-gradient-to-r from-background/60 via-background/70 to-background/60 backdrop-blur-xl shadow-lg border-b border-primary/10"
           : "bg-transparent backdrop-blur-none"
       }`}
       style={{

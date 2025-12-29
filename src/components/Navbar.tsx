@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, MessageCircle, Moon, Sun } from "lucide-react";
+import { Menu, X, MessageCircle, Moon, Sun, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { generateWhatsAppLink } from "@/data/products";
+import NavbarSearch from "./NavbarSearch";
 
 interface NavbarProps {
   isDark: boolean;
@@ -90,8 +91,9 @@ const Navbar = ({ isDark, toggleDark }: NavbarProps) => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => renderNavLink(link, false))}
+            <NavbarSearch />
           </div>
 
           {/* Desktop Actions */}
@@ -143,6 +145,7 @@ const Navbar = ({ isDark, toggleDark }: NavbarProps) => {
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-background/98 backdrop-blur-lg border-b border-border animate-fade-in">
             <div className="container-custom py-4 flex flex-col gap-2">
+              <NavbarSearch isMobile onClose={() => setIsMobileMenuOpen(false)} />
               {navLinks.map((link) => renderNavLink(link, true))}
               <Button
                 asChild

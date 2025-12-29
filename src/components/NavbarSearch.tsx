@@ -118,29 +118,46 @@ const NavbarSearch = ({ onClose, isMobile = false }: NavbarSearchProps) => {
       {isOpen && suggestions.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
           <ul className="py-1">
-            {suggestions.map((product, index) => (
-              <li key={product.kode}>
-                <button
-                  onClick={() => handleSelectProduct(product)}
-                  className={cn(
-                    "w-full px-4 py-2.5 text-left flex items-center gap-3 transition-colors",
-                    selectedIndex === index
-                      ? "bg-primary/10 text-primary"
-                      : "hover:bg-secondary/50"
-                  )}
-                >
-                  <img
-                    src={product.gambar}
-                    alt={product.nama}
-                    className="w-8 h-8 rounded object-cover"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm truncate">{product.nama}</p>
-                    <p className="text-xs text-muted-foreground">{product.kategori}</p>
-                  </div>
-                </button>
-              </li>
-            ))}
+          {suggestions.map((product, index) => {
+              const highlightText = (text: string) => {
+                if (!query.trim()) return text;
+                const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                const parts = text.split(regex);
+                return parts.map((part, i) =>
+                  regex.test(part) ? (
+                    <span key={i} className="bg-primary/20 text-primary font-semibold">
+                      {part}
+                    </span>
+                  ) : (
+                    part
+                  )
+                );
+              };
+
+              return (
+                <li key={product.kode}>
+                  <button
+                    onClick={() => handleSelectProduct(product)}
+                    className={cn(
+                      "w-full px-4 py-2.5 text-left flex items-center gap-3 transition-colors",
+                      selectedIndex === index
+                        ? "bg-primary/10 text-primary"
+                        : "hover:bg-secondary/50"
+                    )}
+                  >
+                    <img
+                      src={product.gambar}
+                      alt={product.nama}
+                      className="w-8 h-8 rounded object-cover"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm truncate">{highlightText(product.nama)}</p>
+                      <p className="text-xs text-muted-foreground">{highlightText(product.kategori)}</p>
+                    </div>
+                  </button>
+                </li>
+              );
+            })}
           </ul>
           {query.trim() && (
             <button

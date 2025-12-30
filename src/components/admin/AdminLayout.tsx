@@ -15,7 +15,8 @@ import {
   Menu,
   X,
   ChevronLeft,
-  Building2
+  Building2,
+  BarChart3
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -24,6 +25,7 @@ const sidebarLinks = [
   { to: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
   { to: '/admin/cashflow', icon: Wallet, label: 'Cashflow' },
   { to: '/admin/products', icon: Package, label: 'Products' },
+  { to: '/admin/insights', icon: BarChart3, label: 'Insights' },
   { to: '/admin/customers', icon: Users, label: 'Customers' },
   { to: '/admin/security', icon: Shield, label: 'Security' },
 ];

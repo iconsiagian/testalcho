@@ -59,6 +59,84 @@ export type Database = {
         }
         Relationships: []
       }
+      analytics_events: {
+        Row: {
+          created_at: string
+          event_category: string
+          event_data: Json | null
+          event_name: string
+          id: string
+          page_path: string | null
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_category: string
+          event_data?: Json | null
+          event_name: string
+          id?: string
+          page_path?: string | null
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          event_category?: string
+          event_data?: Json | null
+          event_name?: string
+          id?: string
+          page_path?: string | null
+          session_id?: string
+        }
+        Relationships: []
+      }
+      analytics_sessions: {
+        Row: {
+          browser: string | null
+          created_at: string
+          device_type: string
+          duration_seconds: number
+          entry_page: string | null
+          exit_page: string | null
+          id: string
+          is_new_visitor: boolean
+          last_activity_at: string
+          os: string | null
+          page_count: number
+          session_id: string
+          visitor_id: string
+        }
+        Insert: {
+          browser?: string | null
+          created_at?: string
+          device_type?: string
+          duration_seconds?: number
+          entry_page?: string | null
+          exit_page?: string | null
+          id?: string
+          is_new_visitor?: boolean
+          last_activity_at?: string
+          os?: string | null
+          page_count?: number
+          session_id: string
+          visitor_id: string
+        }
+        Update: {
+          browser?: string | null
+          created_at?: string
+          device_type?: string
+          duration_seconds?: number
+          entry_page?: string | null
+          exit_page?: string | null
+          id?: string
+          is_new_visitor?: boolean
+          last_activity_at?: string
+          os?: string | null
+          page_count?: number
+          session_id?: string
+          visitor_id?: string
+        }
+        Relationships: []
+      }
       customers: {
         Row: {
           address: string | null
@@ -223,6 +301,81 @@ export type Database = {
           },
         ]
       }
+      page_views: {
+        Row: {
+          browser: string | null
+          created_at: string
+          device_type: string
+          id: string
+          os: string | null
+          page_path: string
+          page_title: string | null
+          referrer: string | null
+          screen_height: number | null
+          screen_width: number | null
+          session_id: string
+        }
+        Insert: {
+          browser?: string | null
+          created_at?: string
+          device_type?: string
+          id?: string
+          os?: string | null
+          page_path: string
+          page_title?: string | null
+          referrer?: string | null
+          screen_height?: number | null
+          screen_width?: number | null
+          session_id: string
+        }
+        Update: {
+          browser?: string | null
+          created_at?: string
+          device_type?: string
+          id?: string
+          os?: string | null
+          page_path?: string
+          page_title?: string | null
+          referrer?: string | null
+          screen_height?: number | null
+          screen_width?: number | null
+          session_id?: string
+        }
+        Relationships: []
+      }
+      product_interests: {
+        Row: {
+          cart_count: number
+          click_count: number
+          date: string
+          id: string
+          product_id: string
+          product_name: string
+          view_count: number
+          whatsapp_count: number
+        }
+        Insert: {
+          cart_count?: number
+          click_count?: number
+          date?: string
+          id?: string
+          product_id: string
+          product_name: string
+          view_count?: number
+          whatsapp_count?: number
+        }
+        Update: {
+          cart_count?: number
+          click_count?: number
+          date?: string
+          id?: string
+          product_id?: string
+          product_name?: string
+          view_count?: number
+          whatsapp_count?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           business_name: string
@@ -253,6 +406,60 @@ export type Database = {
           phone?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      scroll_tracking: {
+        Row: {
+          created_at: string
+          id: string
+          max_scroll_depth: number
+          page_path: string
+          section_visibility: Json | null
+          session_id: string
+          time_on_page: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          max_scroll_depth?: number
+          page_path: string
+          section_visibility?: Json | null
+          session_id: string
+          time_on_page?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          max_scroll_depth?: number
+          page_path?: string
+          section_visibility?: Json | null
+          session_id?: string
+          time_on_page?: number
+        }
+        Relationships: []
+      }
+      search_analytics: {
+        Row: {
+          created_at: string
+          id: string
+          results_count: number
+          search_query: string
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          results_count?: number
+          search_query: string
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          results_count?: number
+          search_query?: string
+          session_id?: string
         }
         Relationships: []
       }

@@ -19,7 +19,6 @@ import AuthCallback from "./pages/auth/AuthCallback";
 // Admin pages
 import AdminLayout from "./components/admin/AdminLayout";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
-import DeviceVerifyPage from "./pages/admin/DeviceVerifyPage";
 import DashboardPage from "./pages/admin/DashboardPage";
 import OrdersPage from "./pages/admin/OrdersPage";
 import CashflowPage from "./pages/admin/CashflowPage";
@@ -46,13 +45,11 @@ const App = () => (
                 <Route path="/auth/verify-email" element={<VerifyEmailPage />} />
                 <Route path="/auth/callback" element={<AuthCallback />} />
                 
-                {/* Device verification (requires login but not device verification) */}
-                <Route path="/admin/device-verify" element={<DeviceVerifyPage />} />
-                
-                {/* Protected admin routes */}
+                {/* Protected admin routes - only accessible by admin email */}
                 <Route element={<ProtectedRoute />}>
                   <Route element={<AdminLayout />}>
                     <Route path="/admin" element={<DashboardPage />} />
+                    <Route path="/admin/dashboard" element={<DashboardPage />} />
                     <Route path="/admin/orders" element={<OrdersPage />} />
                     <Route path="/admin/cashflow" element={<CashflowPage />} />
                     <Route path="/admin/products" element={<DashboardPage />} />

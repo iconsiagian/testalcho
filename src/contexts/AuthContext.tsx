@@ -20,12 +20,16 @@ interface UserRole {
   created_at: string;
 }
 
+// Admin email constant
+const ADMIN_EMAIL = 'nixonsiagian49@gmail.com';
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   profile: Profile | null;
   userRole: UserRole | null;
   loading: boolean;
+  isAdmin: boolean;
   signUp: (email: string, password: string, metadata: { business_name: string; full_name: string; phone: string }) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
@@ -49,6 +53,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [profile, setProfile] = useState<Profile | null>(null);
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Admin check based on email
+  const isAdmin = user?.email === ADMIN_EMAIL;
 
   const fetchProfile = async (userId: string) => {
     try {
@@ -179,6 +186,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       profile,
       userRole,
       loading,
+      isAdmin,
       signUp,
       signIn,
       signOut,

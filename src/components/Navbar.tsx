@@ -35,7 +35,7 @@ interface NavbarProps {
 const Navbar = ({ isDark, toggleDark }: NavbarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { user, isAdmin, signOut } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -137,27 +137,20 @@ const Navbar = ({ isDark, toggleDark }: NavbarProps) => {
       >
         {user ? (
           <>
-            <DropdownMenuItem 
-              onClick={() => {
-                navigate("/admin");
-                if (mobile) setIsMobileMenuOpen(false);
-              }}
-              className="cursor-pointer"
-            >
-              <LayoutDashboard className="mr-2 h-4 w-4" />
-              Dashboard
-            </DropdownMenuItem>
-            <DropdownMenuItem 
-              onClick={() => {
-                navigate("/admin/security");
-                if (mobile) setIsMobileMenuOpen(false);
-              }}
-              className="cursor-pointer"
-            >
-              <Shield className="mr-2 h-4 w-4" />
-              Security Settings
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            {/* Admin Dashboard - only visible to admin */}
+            {isAdmin && (
+              <DropdownMenuItem 
+                onClick={() => {
+                  navigate("/admin/dashboard");
+                  if (mobile) setIsMobileMenuOpen(false);
+                }}
+                className="cursor-pointer"
+              >
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                Admin Dashboard
+              </DropdownMenuItem>
+            )}
+            {isAdmin && <DropdownMenuSeparator />}
             <DropdownMenuItem 
               onClick={() => {
                 handleLogout();

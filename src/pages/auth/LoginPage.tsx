@@ -68,8 +68,8 @@ const LoginPage: React.FC = () => {
         description: 'Selamat datang kembali!',
       });
 
-      // Navigate to device verification or dashboard
-      navigate('/admin/device-verify');
+      // All users redirect to homepage after login
+      navigate('/');
     } catch (error) {
       toast({
         title: 'Error',

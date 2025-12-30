@@ -3,12 +3,21 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { generateWhatsAppLink } from "@/data/products";
 
+// Import menu images
+import nasiGorengImg from "@/assets/menu/nasi-goreng.jpg";
+import rendangImg from "@/assets/menu/rendang.jpg";
+import sotoAyamImg from "@/assets/menu/soto-ayam.jpg";
+import ayamBbqImg from "@/assets/menu/ayam-bbq.jpg";
+import gulaiKambingImg from "@/assets/menu/gulai-kambing.jpg";
+import nasiCampurImg from "@/assets/menu/nasi-campur.jpg";
+
 interface MenuItem {
   name: string;
   description: string;
   alchoProduct: string;
   useCase: string;
   useCaseIcon: React.ReactNode;
+  image: string;
 }
 
 const menuItems: MenuItem[] = [
@@ -18,6 +27,7 @@ const menuItems: MenuItem[] = [
     alchoProduct: "Bumbu Nasi Goreng ALCHO",
     useCase: "Cloud Kitchen",
     useCaseIcon: <Building2 className="w-3 h-3" />,
+    image: nasiGorengImg,
   },
   {
     name: "Rendang Daging Sapi",
@@ -25,6 +35,7 @@ const menuItems: MenuItem[] = [
     alchoProduct: "Bumbu Rendang ALCHO",
     useCase: "Restoran",
     useCaseIcon: <Store className="w-3 h-3" />,
+    image: rendangImg,
   },
   {
     name: "Soto Ayam Komplit",
@@ -32,6 +43,7 @@ const menuItems: MenuItem[] = [
     alchoProduct: "Bumbu Soto ALCHO",
     useCase: "Katering",
     useCaseIcon: <Truck className="w-3 h-3" />,
+    image: sotoAyamImg,
   },
   {
     name: "Ayam Bakar BBQ",
@@ -39,6 +51,7 @@ const menuItems: MenuItem[] = [
     alchoProduct: "Saus BBQ ALCHO",
     useCase: "Cloud Kitchen",
     useCaseIcon: <Building2 className="w-3 h-3" />,
+    image: ayamBbqImg,
   },
   {
     name: "Gulai Kambing",
@@ -46,6 +59,7 @@ const menuItems: MenuItem[] = [
     alchoProduct: "Bumbu Gulai ALCHO",
     useCase: "Katering",
     useCaseIcon: <Truck className="w-3 h-3" />,
+    image: gulaiKambingImg,
   },
   {
     name: "Nasi Campur Bali",
@@ -53,6 +67,7 @@ const menuItems: MenuItem[] = [
     alchoProduct: "Sambal Matah ALCHO",
     useCase: "Restoran",
     useCaseIcon: <Store className="w-3 h-3" />,
+    image: nasiCampurImg,
   },
 ];
 
@@ -80,33 +95,44 @@ const MenuInspirationSection = () => {
           {menuItems.map((item, index) => (
             <div
               key={index}
-              className="group bg-card border border-border rounded-xl p-6 hover:border-primary/30 hover:shadow-lg transition-all duration-300"
+              className="group bg-card border border-border rounded-xl overflow-hidden hover:border-primary/30 hover:shadow-lg transition-all duration-300"
             >
-              {/* Use Case Badge */}
-              <Badge 
-                variant="secondary" 
-                className="mb-4 gap-1.5 bg-secondary text-secondary-foreground"
-              >
-                {item.useCaseIcon}
-                {item.useCase}
-              </Badge>
+              {/* Image */}
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                {/* Use Case Badge - positioned on image */}
+                <Badge 
+                  variant="secondary" 
+                  className="absolute top-3 left-3 gap-1.5 bg-background/90 backdrop-blur-sm text-foreground shadow-sm"
+                >
+                  {item.useCaseIcon}
+                  {item.useCase}
+                </Badge>
+              </div>
 
-              {/* Menu Name */}
-              <h3 className="font-serif text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
-                {item.name}
-              </h3>
+              {/* Content */}
+              <div className="p-5">
+                {/* Menu Name */}
+                <h3 className="font-serif text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
+                  {item.name}
+                </h3>
 
-              {/* Description */}
-              <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
-                {item.description}
-              </p>
-
-              {/* ALCHO Product Used */}
-              <div className="pt-4 border-t border-border">
-                <p className="text-xs text-muted-foreground mb-1">Produk yang digunakan:</p>
-                <p className="text-sm font-medium text-primary">
-                  {item.alchoProduct}
+                {/* Description */}
+                <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
+                  {item.description}
                 </p>
+
+                {/* ALCHO Product Used */}
+                <div className="pt-4 border-t border-border">
+                  <p className="text-xs text-muted-foreground mb-1">Produk yang digunakan:</p>
+                  <p className="text-sm font-medium text-primary">
+                    {item.alchoProduct}
+                  </p>
+                </div>
               </div>
             </div>
           ))}

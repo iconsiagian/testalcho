@@ -8,17 +8,18 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useToast } from '@/hooks/use-toast';
-import { Eye, EyeOff, Loader2, Building2, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, Loader2, User, ArrowLeft, ChevronDown } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 
 const registerSchema = z.object({
-  businessName: z.string().min(2, 'Nama bisnis minimal 2 karakter').max(100),
   fullName: z.string().min(2, 'Nama lengkap minimal 2 karakter').max(100),
   email: z.string().email('Email tidak valid'),
-  phone: z.string().min(10, 'Nomor telepon minimal 10 digit').max(15),
   password: z.string().min(8, 'Password minimal 8 karakter'),
-  confirmPassword: z.string()
+  confirmPassword: z.string(),
+  businessName: z.string().max(100).optional(),
+  phone: z.string().max(15).optional()
 }).refine((data) => data.password === data.confirmPassword, {
   message: 'Password tidak cocok',
   path: ['confirmPassword'],
@@ -33,16 +34,17 @@ const RegisterPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showOptional, setShowOptional] = useState(false);
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      businessName: '',
       fullName: '',
       email: '',
-      phone: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      businessName: '',
+      phone: ''
     }
   });
 
@@ -50,9 +52,9 @@ const RegisterPage: React.FC = () => {
     setIsLoading(true);
     try {
       const { error } = await signUp(values.email, values.password, {
-        business_name: values.businessName,
+        business_name: values.businessName || '',
         full_name: values.fullName,
-        phone: values.phone
+        phone: values.phone || ''
       });
 
       if (error) {
@@ -92,8 +94,8 @@ const RegisterPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Daftar - ALCHO Admin</title>
-        <meta name="description" content="Daftar akun bisnis ALCHO untuk akses panel admin" />
+        <title>Daftar Akun - ALCHO</title>
+        <meta name="description" content="Buat akun ALCHO untuk memesan produk dan mengelola pesanan" />
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 flex items-center justify-center p-4">
@@ -109,11 +111,11 @@ const RegisterPage: React.FC = () => {
           <Card className="border-border/50 shadow-elevated">
             <CardHeader className="text-center pb-6">
               <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Building2 className="w-8 h-8 text-primary" />
+                <User className="w-8 h-8 text-primary" />
               </div>
-              <CardTitle className="text-2xl font-display">Daftar Akun Bisnis</CardTitle>
+              <CardTitle className="text-2xl font-display">Daftar Akun</CardTitle>
               <CardDescription>
-                Bergabung dengan ALCHO untuk mengelola pesanan dan produk
+                Buat akun untuk memesan produk, mengakses dashboard, dan mengelola pesanan Anda.
               </CardDescription>
             </CardHeader>
 
@@ -122,31 +124,13 @@ const RegisterPage: React.FC = () => {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                   <FormField
                     control={form.control}
-                    name="businessName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Nama Bisnis</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="PT. Contoh Jaya" 
-                            {...field} 
-                            disabled={isLoading}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
                     name="fullName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Nama Lengkap</FormLabel>
+                        <FormLabel>Nama Lengkap <span className="text-destructive">*</span></FormLabel>
                         <FormControl>
                           <Input 
-                            placeholder="John Doe" 
+                            placeholder="Nama lengkap Anda" 
                             {...field} 
                             disabled={isLoading}
                           />
@@ -161,30 +145,11 @@ const RegisterPage: React.FC = () => {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel>Email <span className="text-destructive">*</span></FormLabel>
                         <FormControl>
                           <Input 
                             type="email" 
-                            placeholder="email@bisnis.com" 
-                            {...field} 
-                            disabled={isLoading}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Nomor Telepon</FormLabel>
-                        <FormControl>
-                          <Input 
-                            type="tel" 
-                            placeholder="08123456789" 
+                            placeholder="email@contoh.com" 
                             {...field} 
                             disabled={isLoading}
                           />
@@ -199,7 +164,7 @@ const RegisterPage: React.FC = () => {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel>Password <span className="text-destructive">*</span></FormLabel>
                         <FormControl>
                           <div className="relative">
                             <Input 
@@ -227,7 +192,7 @@ const RegisterPage: React.FC = () => {
                     name="confirmPassword"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Konfirmasi Password</FormLabel>
+                        <FormLabel>Konfirmasi Password <span className="text-destructive">*</span></FormLabel>
                         <FormControl>
                           <div className="relative">
                             <Input 
@@ -249,6 +214,57 @@ const RegisterPage: React.FC = () => {
                       </FormItem>
                     )}
                   />
+
+                  {/* Optional Business Fields */}
+                  <Collapsible open={showOptional} onOpenChange={setShowOptional}>
+                    <CollapsibleTrigger asChild>
+                      <button
+                        type="button"
+                        className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors w-full py-2"
+                      >
+                        <ChevronDown className={`w-4 h-4 transition-transform ${showOptional ? 'rotate-180' : ''}`} />
+                        Informasi Bisnis (Opsional)
+                      </button>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="space-y-4 pt-2">
+                      <FormField
+                        control={form.control}
+                        name="businessName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Nama Bisnis</FormLabel>
+                            <FormControl>
+                              <Input 
+                                placeholder="Nama bisnis/perusahaan (opsional)" 
+                                {...field} 
+                                disabled={isLoading}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="phone"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Nomor Telepon</FormLabel>
+                            <FormControl>
+                              <Input 
+                                type="tel" 
+                                placeholder="08123456789 (opsional)" 
+                                {...field} 
+                                disabled={isLoading}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </CollapsibleContent>
+                  </Collapsible>
 
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? (

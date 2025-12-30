@@ -1,18 +1,19 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Helmet } from 'react-helmet-async';
 import { 
   ShoppingCart, 
   DollarSign, 
   Clock, 
   CheckCircle,
-  TrendingUp,
-  TrendingDown,
   Package,
-  Users
+  Users,
+  Info
 } from 'lucide-react';
 
 const DashboardPage: React.FC = () => {
@@ -107,11 +108,24 @@ const DashboardPage: React.FC = () => {
       </Helmet>
 
       <div className="p-6 space-y-6">
+        {/* Business Info Reminder Banner */}
+        {profile && (!profile.business_name || !profile.phone) && (
+          <Alert className="border-primary/20 bg-primary/5">
+            <Info className="h-4 w-4 text-primary" />
+            <AlertDescription className="text-sm">
+              <span className="text-foreground">Lengkapi data bisnis Anda (opsional) untuk pengalaman yang lebih baik.</span>
+              <Link to="/admin/profile" className="ml-2 text-primary hover:underline font-medium">
+                Lengkapi sekarang →
+              </Link>
+            </AlertDescription>
+          </Alert>
+        )}
+
         {/* Header */}
         <div>
           <h1 className="text-2xl font-display font-bold text-foreground">Dashboard</h1>
           <p className="text-muted-foreground">
-            Selamat datang kembali, {profile?.full_name || 'Admin'}
+            Selamat datang kembali, {profile?.full_name || 'Pengguna'}
           </p>
         </div>
 

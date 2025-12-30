@@ -23,6 +23,7 @@ import DashboardPage from "./pages/admin/DashboardPage";
 import OrdersPage from "./pages/admin/OrdersPage";
 import CashflowPage from "./pages/admin/CashflowPage";
 import ProductsPage from "./pages/admin/ProductsPage";
+import InsightsPage from "./pages/admin/InsightsPage";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +55,7 @@ const App = () => (
                     <Route path="/admin/orders" element={<OrdersPage />} />
                     <Route path="/admin/cashflow" element={<CashflowPage />} />
                     <Route path="/admin/products" element={<ProductsPage />} />
+                    <Route path="/admin/insights" element={<InsightsPage />} />
                     <Route path="/admin/customers" element={<DashboardPage />} />
                     <Route path="/admin/security" element={<DashboardPage />} />
                   </Route>

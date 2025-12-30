@@ -53,17 +53,87 @@ const ProductPreview = () => {
           ))}
         </div>
 
-        {/* Product Grid - Preview */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {previewProducts.map((product, index) => (
-            <ProductCard
-              key={product.kode}
-              product={product}
-              onClick={() => handleProductClick(product)}
-              index={index}
-            />
-          ))}
-        </div>
+        {/* Product Grid - Grouped by Category */}
+        {selectedCategory === "Semua" ? (
+          <>
+            {/* Sauces Section */}
+            {previewProducts.some(p => p.kategori === "Sauce") && (
+              <section id="sauces" className="scroll-mt-32 mb-10">
+                <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <span className="w-1 h-5 bg-primary rounded-full"></span>
+                  Sauce
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                  {previewProducts
+                    .filter(p => p.kategori === "Sauce")
+                    .map((product, index) => (
+                      <ProductCard
+                        key={product.kode}
+                        product={product}
+                        onClick={() => handleProductClick(product)}
+                        index={index}
+                      />
+                    ))}
+                </div>
+              </section>
+            )}
+
+            {/* Sambal Section */}
+            {previewProducts.some(p => p.kategori === "Sambal & Saus Pedas") && (
+              <section id="sambal" className="scroll-mt-32 mb-10">
+                <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <span className="w-1 h-5 bg-primary rounded-full"></span>
+                  Sambal & Saus Pedas
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                  {previewProducts
+                    .filter(p => p.kategori === "Sambal & Saus Pedas")
+                    .map((product, index) => (
+                      <ProductCard
+                        key={product.kode}
+                        product={product}
+                        onClick={() => handleProductClick(product)}
+                        index={index}
+                      />
+                    ))}
+                </div>
+              </section>
+            )}
+
+            {/* Seasoning Section */}
+            {previewProducts.some(p => p.kategori === "Bumbu & Seasoning") && (
+              <section id="seasoning" className="scroll-mt-32 mb-10">
+                <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <span className="w-1 h-5 bg-primary rounded-full"></span>
+                  Bumbu & Seasoning
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                  {previewProducts
+                    .filter(p => p.kategori === "Bumbu & Seasoning")
+                    .map((product, index) => (
+                      <ProductCard
+                        key={product.kode}
+                        product={product}
+                        onClick={() => handleProductClick(product)}
+                        index={index}
+                      />
+                    ))}
+                </div>
+              </section>
+            )}
+          </>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {previewProducts.map((product, index) => (
+              <ProductCard
+                key={product.kode}
+                product={product}
+                onClick={() => handleProductClick(product)}
+                index={index}
+              />
+            ))}
+          </div>
+        )}
 
         {/* View All Button */}
         <div className="text-center mt-10">

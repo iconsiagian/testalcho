@@ -84,8 +84,8 @@ const LoginPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Login - ALCHO Admin</title>
-        <meta name="description" content="Login ke panel admin ALCHO" />
+        <title>Login - ALCHO</title>
+        <meta name="description" content="Masuk ke akun ALCHO Anda" />
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 flex items-center justify-center p-4">
@@ -103,9 +103,9 @@ const LoginPage: React.FC = () => {
               <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <LogIn className="w-8 h-8 text-primary" />
               </div>
-              <CardTitle className="text-2xl font-display">Login Admin</CardTitle>
+              <CardTitle className="text-2xl font-display">Login</CardTitle>
               <CardDescription>
-                Masuk ke panel admin untuk mengelola bisnis Anda
+                Masuk untuk mengakses akun dan dashboard Anda
               </CardDescription>
             </CardHeader>
 
@@ -121,7 +121,7 @@ const LoginPage: React.FC = () => {
                         <FormControl>
                           <Input 
                             type="email" 
-                            placeholder="email@bisnis.com" 
+                            placeholder="email@contoh.com" 
                             {...field} 
                             disabled={isLoading}
                           />

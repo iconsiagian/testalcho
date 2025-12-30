@@ -5,30 +5,68 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { CartProvider } from "@/contexts/CartContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import ProductsPage from "./pages/ProductsPage";
 import NotFound from "./pages/NotFound";
 
+// Auth pages
+import RegisterPage from "./pages/auth/RegisterPage";
+import LoginPage from "./pages/auth/LoginPage";
+import VerifyEmailPage from "./pages/auth/VerifyEmailPage";
+import AuthCallback from "./pages/auth/AuthCallback";
+
+// Admin pages
+import AdminLayout from "./components/admin/AdminLayout";
+import ProtectedRoute from "./components/admin/ProtectedRoute";
+import DeviceVerifyPage from "./pages/admin/DeviceVerifyPage";
+import DashboardPage from "./pages/admin/DashboardPage";
+import OrdersPage from "./pages/admin/OrdersPage";
+import CashflowPage from "./pages/admin/CashflowPage";
+
 const queryClient = new QueryClient();
 
-// App component with all providers
 const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/produk" element={<ProductsPage />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                {/* Public routes */}
+                <Route path="/" element={<Index />} />
+                <Route path="/produk" element={<ProductsPage />} />
+                
+                {/* Auth routes */}
+                <Route path="/auth/register" element={<RegisterPage />} />
+                <Route path="/auth/login" element={<LoginPage />} />
+                <Route path="/auth/verify-email" element={<VerifyEmailPage />} />
+                <Route path="/auth/callback" element={<AuthCallback />} />
+                
+                {/* Device verification (requires login but not device verification) */}
+                <Route path="/admin/device-verify" element={<DeviceVerifyPage />} />
+                
+                {/* Protected admin routes */}
+                <Route element={<ProtectedRoute />}>
+                  <Route element={<AdminLayout />}>
+                    <Route path="/admin" element={<DashboardPage />} />
+                    <Route path="/admin/orders" element={<OrdersPage />} />
+                    <Route path="/admin/cashflow" element={<CashflowPage />} />
+                    <Route path="/admin/products" element={<DashboardPage />} />
+                    <Route path="/admin/customers" element={<DashboardPage />} />
+                    <Route path="/admin/security" element={<DashboardPage />} />
+                  </Route>
+                </Route>
+                
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </CartProvider>
+      </AuthProvider>
     </QueryClientProvider>
   </HelmetProvider>
 );

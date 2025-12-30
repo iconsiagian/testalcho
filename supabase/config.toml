@@ -1,1 +1,4 @@
 project_id = "aotwnrwqbprrlcnefyaf"
+
+[functions.send-device-otp]
+verify_jwt = true

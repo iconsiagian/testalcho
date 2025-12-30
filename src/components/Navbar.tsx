@@ -25,6 +25,7 @@ const Navbar = ({ isDark, toggleDark }: NavbarProps) => {
 
   const navLinks = [
     { name: "Produk", href: "/produk", isRoute: true },
+    { name: "Inspirasi Menu", href: "#inspirasi-menu", isRoute: false },
     { name: "Pricelist", href: "#pricelist", isRoute: false },
     { name: "Tentang", href: "#tentang", isRoute: false },
     { name: "Kontak", href: "#kontak", isRoute: false },

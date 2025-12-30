@@ -201,16 +201,87 @@ const ProductsPage = () => {
                   <div className="flex-1">
                     {filteredProducts.length > 0 ? (
                       <>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                          {filteredProducts.map((product, index) => (
-                            <ProductCard
-                              key={product.kode}
-                              product={product}
-                              onClick={() => setSelectedProduct(product)}
-                              index={index}
-                            />
-                          ))}
-                        </div>
+                        {/* Group products by category and render with section IDs */}
+                        {selectedCategory === "Semua" ? (
+                          <>
+                            {/* Sauces Section */}
+                            {filteredProducts.some(p => p.kategori === "Sauce") && (
+                              <section id="sauces" className="scroll-mt-32 mb-10">
+                                <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                                  <span className="w-1 h-5 bg-primary rounded-full"></span>
+                                  Sauce
+                                </h2>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                                  {filteredProducts
+                                    .filter(p => p.kategori === "Sauce")
+                                    .map((product, index) => (
+                                      <ProductCard
+                                        key={product.kode}
+                                        product={product}
+                                        onClick={() => setSelectedProduct(product)}
+                                        index={index}
+                                      />
+                                    ))}
+                                </div>
+                              </section>
+                            )}
+
+                            {/* Sambal Section */}
+                            {filteredProducts.some(p => p.kategori === "Sambal & Saus Pedas") && (
+                              <section id="sambal" className="scroll-mt-32 mb-10">
+                                <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                                  <span className="w-1 h-5 bg-primary rounded-full"></span>
+                                  Sambal & Saus Pedas
+                                </h2>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                                  {filteredProducts
+                                    .filter(p => p.kategori === "Sambal & Saus Pedas")
+                                    .map((product, index) => (
+                                      <ProductCard
+                                        key={product.kode}
+                                        product={product}
+                                        onClick={() => setSelectedProduct(product)}
+                                        index={index}
+                                      />
+                                    ))}
+                                </div>
+                              </section>
+                            )}
+
+                            {/* Seasoning Section */}
+                            {filteredProducts.some(p => p.kategori === "Bumbu & Seasoning") && (
+                              <section id="seasoning" className="scroll-mt-32 mb-10">
+                                <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                                  <span className="w-1 h-5 bg-primary rounded-full"></span>
+                                  Bumbu & Seasoning
+                                </h2>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                                  {filteredProducts
+                                    .filter(p => p.kategori === "Bumbu & Seasoning")
+                                    .map((product, index) => (
+                                      <ProductCard
+                                        key={product.kode}
+                                        product={product}
+                                        onClick={() => setSelectedProduct(product)}
+                                        index={index}
+                                      />
+                                    ))}
+                                </div>
+                              </section>
+                            )}
+                          </>
+                        ) : (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                            {filteredProducts.map((product, index) => (
+                              <ProductCard
+                                key={product.kode}
+                                product={product}
+                                onClick={() => setSelectedProduct(product)}
+                                index={index}
+                              />
+                            ))}
+                          </div>
+                        )}
 
                         {/* Results count */}
                         <p className="text-center text-sm text-muted-foreground mt-8">

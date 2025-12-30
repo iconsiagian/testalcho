@@ -7,6 +7,13 @@ import { Product, formatPrice } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 
+// Map category names to section IDs
+const categoryToSectionId: Record<string, string> = {
+  "Sauce": "sauces",
+  "Sambal & Saus Pedas": "sambal",
+  "Bumbu & Seasoning": "seasoning",
+};
+
 interface ProductCardProps {
   product: Product;
   onClick: () => void;
@@ -107,8 +114,22 @@ const ProductCard = ({ product, onClick, index }: ProductCardProps) => {
           {product.nama}
         </h3>
 
-        {/* Category */}
-        <p className="text-sm text-muted-foreground mb-3">{product.kategori}</p>
+        {/* Category - Clickable */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            const sectionId = categoryToSectionId[product.kategori];
+            if (sectionId) {
+              const element = document.getElementById(sectionId);
+              if (element) {
+                element.scrollIntoView({ behavior: "smooth", block: "start" });
+              }
+            }
+          }}
+          className="text-sm text-muted-foreground mb-3 hover:text-primary hover:underline transition-colors cursor-pointer text-left"
+        >
+          {product.kategori}
+        </button>
 
         {/* Main Variant & Price */}
         <div className="flex items-end justify-between pt-3 border-t border-border/50">

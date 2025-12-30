@@ -7,7 +7,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { CartProvider } from "@/contexts/CartContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
-import ProductsPage from "./pages/ProductsPage";
+import PublicProductsPage from "./pages/ProductsPage";
 import NotFound from "./pages/NotFound";
 
 // Auth pages
@@ -22,6 +22,7 @@ import ProtectedRoute from "./components/admin/ProtectedRoute";
 import DashboardPage from "./pages/admin/DashboardPage";
 import OrdersPage from "./pages/admin/OrdersPage";
 import CashflowPage from "./pages/admin/CashflowPage";
+import ProductsPage from "./pages/admin/ProductsPage";
 
 const queryClient = new QueryClient();
 
@@ -37,7 +38,7 @@ const App = () => (
               <Routes>
                 {/* Public routes */}
                 <Route path="/" element={<Index />} />
-                <Route path="/produk" element={<ProductsPage />} />
+                <Route path="/produk" element={<PublicProductsPage />} />
                 
                 {/* Auth routes */}
                 <Route path="/auth/register" element={<RegisterPage />} />
@@ -52,7 +53,7 @@ const App = () => (
                     <Route path="/admin/dashboard" element={<DashboardPage />} />
                     <Route path="/admin/orders" element={<OrdersPage />} />
                     <Route path="/admin/cashflow" element={<CashflowPage />} />
-                    <Route path="/admin/products" element={<DashboardPage />} />
+                    <Route path="/admin/products" element={<ProductsPage />} />
                     <Route path="/admin/customers" element={<DashboardPage />} />
                     <Route path="/admin/security" element={<DashboardPage />} />
                   </Route>

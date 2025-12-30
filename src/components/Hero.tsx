@@ -1,12 +1,57 @@
-import { ArrowRight, MessageCircle, ChefHat, Award, Sparkles } from "lucide-react";
+import { ArrowRight, MessageCircle, ChefHat, Award, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { generateWhatsAppLink } from "@/data/products";
+import { useEffect, useState, useCallback } from "react";
+
+// Import slider images
 import heroBanner from "@/assets/hero-banner.png";
-import { useEffect, useState } from "react";
+import bumbuRendang from "@/assets/products/bumbu-rendang.png";
+import sambalPedas from "@/assets/products/sambal-pedas.png";
+import sausBbq from "@/assets/products/saus-bbq.png";
+import bumbuGulai from "@/assets/products/bumbu-gulai.png";
 
 const Hero = () => {
   const [scrollY, setScrollY] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
+  // Slider images with premium backgrounds
+  const slides = [
+    {
+      image: heroBanner,
+      alt: "Premium bumbu dan saus ALCHO - berbagai rempah dan produk saus berkualitas tinggi",
+    },
+    {
+      image: bumbuRendang,
+      alt: "Bumbu Rendang ALCHO - resep autentik kualitas premium",
+    },
+    {
+      image: sambalPedas,
+      alt: "Sambal Pedas ALCHO - cita rasa nusantara",
+    },
+    {
+      image: sausBbq,
+      alt: "Saus BBQ ALCHO - saus berkualitas untuk bisnis kuliner",
+    },
+    {
+      image: bumbuGulai,
+      alt: "Bumbu Gulai ALCHO - bumbu tradisional premium",
+    },
+  ];
+
+  // Auto-slide functionality
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 6000); // 6 seconds per slide
+
+    return () => clearInterval(interval);
+  }, [isPaused, slides.length]);
+
+  // Scroll handler
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -16,6 +61,25 @@ const Hero = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Navigation handlers
+  const goToSlide = useCallback((index: number) => {
+    setCurrentSlide(index);
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 10000); // Resume after 10s
+  }, []);
+
+  const goToPrev = useCallback(() => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 10000);
+  }, [slides.length]);
+
+  const goToNext = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 10000);
+  }, [slides.length]);
+
   const features = [
     { icon: ChefHat, text: "Kualitas Premium" },
     { icon: Award, text: "Rasa Konsisten" },
@@ -23,12 +87,44 @@ const Hero = () => {
   ];
 
   return (
-    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Parallax Background Elements */}
-      <div 
-        className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/30"
-        style={{ transform: `translateY(${scrollY * 0.1}px)` }}
-      />
+    <section 
+      className="relative min-h-screen flex items-center pt-20 overflow-hidden"
+      onMouseEnter={() => {
+        setIsHovered(true);
+        setIsPaused(true);
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setIsPaused(false);
+      }}
+    >
+      {/* Background Image Slider */}
+      <div className="absolute inset-0">
+        {slides.map((slide, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              index === currentSlide ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            {/* Background Image */}
+            <div 
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              style={{ 
+                backgroundImage: `url(${slide.image})`,
+                transform: `translateY(${scrollY * 0.1}px) scale(1.1)`,
+              }}
+            />
+            {/* Dark Premium Overlay with Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/85 to-background/70" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+            {/* Vignette Effect */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(var(--background)/0.4)_100%)]" />
+          </div>
+        ))}
+      </div>
+
+      {/* Parallax Decorative Elements */}
       <div 
         className="absolute top-1/4 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl transition-transform duration-100"
         style={{ transform: `translate(${scrollY * 0.15}px, ${scrollY * -0.1}px)` }}
@@ -37,7 +133,6 @@ const Hero = () => {
         className="absolute bottom-1/4 left-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl transition-transform duration-100"
         style={{ transform: `translate(${scrollY * -0.1}px, ${scrollY * 0.15}px)` }}
       />
-      {/* Additional parallax decorative elements */}
       <div 
         className="absolute top-1/3 left-1/4 w-4 h-4 bg-primary/30 rounded-full"
         style={{ transform: `translateY(${scrollY * -0.3}px)` }}
@@ -51,15 +146,35 @@ const Hero = () => {
         style={{ transform: `translateY(${scrollY * -0.25}px)` }}
       />
 
+      {/* Navigation Arrows - Visible on Hover */}
+      <button
+        onClick={goToPrev}
+        className={`absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-card/30 backdrop-blur-sm border border-border/30 text-foreground/70 hover:bg-card/50 hover:text-foreground transition-all duration-300 ${
+          isHovered ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
+        }`}
+        aria-label="Previous slide"
+      >
+        <ChevronLeft className="w-6 h-6" />
+      </button>
+      <button
+        onClick={goToNext}
+        className={`absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-card/30 backdrop-blur-sm border border-border/30 text-foreground/70 hover:bg-card/50 hover:text-foreground transition-all duration-300 ${
+          isHovered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
+        }`}
+        aria-label="Next slide"
+      >
+        <ChevronRight className="w-6 h-6" />
+      </button>
+
       <div className="container-custom relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Text Content with subtle parallax */}
+          {/* Text Content - Fixed, not sliding */}
           <div 
             className="text-center lg:text-left"
             style={{ transform: `translateY(${scrollY * 0.05}px)`, opacity: Math.max(0, 1 - scrollY * 0.001) }}
           >
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/80 rounded-full mb-8 animate-fade-in-up">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/80 backdrop-blur-sm rounded-full mb-8 animate-fade-in-up">
               <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
               <span className="text-sm font-medium text-muted-foreground">
                 PT Alfa Omega / PT. NEW ALFA OMEGA UTAMA
@@ -110,7 +225,7 @@ const Hero = () => {
               {features.map((feature, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-3 px-4 py-2 bg-card/50 rounded-full border border-border/50"
+                  className="flex items-center gap-3 px-4 py-2 bg-card/50 backdrop-blur-sm rounded-full border border-border/50"
                 >
                   <feature.icon className="h-5 w-5 text-accent" />
                   <span className="font-medium text-foreground/80">{feature.text}</span>
@@ -119,7 +234,7 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Hero Image with parallax */}
+          {/* Hero Image Section with parallax */}
           <div 
             className="relative animate-fade-in-up stagger-2 hidden lg:block"
             style={{ transform: `translateY(${scrollY * -0.08}px)` }}
@@ -135,23 +250,29 @@ const Hero = () => {
                 style={{ transform: `translate(${scrollY * 0.1}px, ${scrollY * 0.12}px)` }}
               />
               
-              {/* Main image with subtle scale on scroll */}
+              {/* Main product image display with slide sync */}
               <div 
-                className="relative rounded-3xl overflow-hidden shadow-2xl border border-border/20 transition-transform duration-300"
+                className="relative rounded-3xl overflow-hidden shadow-2xl border border-border/20 transition-transform duration-300 aspect-square"
                 style={{ transform: `scale(${1 + scrollY * 0.0001})` }}
               >
-                <img
-                  src={heroBanner}
-                  alt="Premium bumbu dan saus ALCHO - berbagai rempah dan produk saus berkualitas tinggi"
-                  className="w-full h-auto object-cover"
-                />
+                {slides.map((slide, index) => (
+                  <img
+                    key={index}
+                    src={slide.image}
+                    alt={slide.alt}
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
+                      index === currentSlide ? "opacity-100" : "opacity-0"
+                    }`}
+                    loading={index === 0 ? "eager" : "lazy"}
+                  />
+                ))}
                 {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" />
               </div>
 
               {/* Floating badge with parallax */}
               <div 
-                className="absolute -bottom-6 -left-6 bg-card px-6 py-4 rounded-2xl shadow-xl border border-border/50 animate-float"
+                className="absolute -bottom-6 -left-6 bg-card/90 backdrop-blur-sm px-6 py-4 rounded-2xl shadow-xl border border-border/50 animate-float"
                 style={{ transform: `translateY(${scrollY * -0.2}px)` }}
               >
                 <div className="flex items-center gap-3">
@@ -167,7 +288,7 @@ const Hero = () => {
 
               {/* Floating badge right with parallax */}
               <div 
-                className="absolute -top-6 -right-6 bg-card px-6 py-4 rounded-2xl shadow-xl border border-border/50 animate-float"
+                className="absolute -top-6 -right-6 bg-card/90 backdrop-blur-sm px-6 py-4 rounded-2xl shadow-xl border border-border/50 animate-float"
                 style={{ 
                   animationDelay: "1s",
                   transform: `translateY(${scrollY * -0.25}px)`
@@ -186,6 +307,22 @@ const Hero = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Slide Indicators */}
+      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`transition-all duration-300 rounded-full ${
+              index === currentSlide 
+                ? "w-8 h-2 bg-primary" 
+                : "w-2 h-2 bg-foreground/30 hover:bg-foreground/50"
+            }`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
       </div>
 
       {/* Scroll Indicator with fade out on scroll */}

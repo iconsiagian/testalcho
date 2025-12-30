@@ -17,7 +17,6 @@ const DeviceVerifyPage: React.FC = () => {
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
-  const [demoOtp, setDemoOtp] = useState<string | null>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -46,10 +45,6 @@ const DeviceVerifyPage: React.FC = () => {
       }
 
       setOtpSent(true);
-      // For demo, show the OTP (remove in production)
-      if (result.data?.demo_otp) {
-        setDemoOtp(result.data.demo_otp);
-      }
       
       toast({
         title: 'OTP Terkirim',
@@ -189,12 +184,11 @@ const DeviceVerifyPage: React.FC = () => {
                 </Button>
               ) : (
                 <>
-                  {demoOtp && (
-                    <div className="bg-accent/10 border border-accent/30 rounded-lg p-4 text-center">
-                      <p className="text-xs text-muted-foreground mb-1">Demo OTP (akan dikirim via email di production):</p>
-                      <p className="font-mono text-2xl font-bold text-accent">{demoOtp}</p>
-                    </div>
-                  )}
+                  <div className="bg-muted/30 border border-border/50 rounded-lg p-4 text-center">
+                    <p className="text-sm text-muted-foreground">
+                      Kode verifikasi telah dikirim ke email terdaftar Anda. Periksa inbox atau folder spam.
+                    </p>
+                  </div>
 
                   <div className="space-y-4">
                     <p className="text-sm text-muted-foreground text-center">

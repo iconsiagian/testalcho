@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { ChefHat, Store, Truck, Building2, MessageCircle, Eye } from "lucide-react";
+import { ChefHat, Store, Truck, Building2, MessageCircle, Eye, Gauge } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { menuRecipes, MenuRecipe, CuisineCategory, getCategoryLabel } from "@/data/menuInspiration";
+import { menuRecipes, MenuRecipe, CuisineCategory, getCategoryLabel, getDifficultyLabel, getDifficultyColor } from "@/data/menuInspiration";
 import { generateWhatsAppLink } from "@/data/products";
 import RecipeDetailModal from "./RecipeDetailModal";
 
@@ -105,9 +105,10 @@ const MenuInspirationSection = () => {
                   </Badge>
                   <Badge 
                     variant="outline"
-                    className="bg-background/90 backdrop-blur-sm border-primary/30 text-primary shadow-sm"
+                    className={`backdrop-blur-sm shadow-sm ${getDifficultyColor(recipe.difficulty)}`}
                   >
-                    {getCategoryLabel(recipe.category)}
+                    <Gauge className="w-3 h-3 mr-1" />
+                    {getDifficultyLabel(recipe.difficulty)}
                   </Badge>
                 </div>
               </div>

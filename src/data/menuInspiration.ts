@@ -7,6 +7,7 @@ import nasiCampurImg from "@/assets/menu/nasi-campur.jpg";
 
 export type CuisineCategory = "local" | "international";
 export type UseCaseType = "Cloud Kitchen" | "Restoran" | "Katering";
+export type DifficultyLevel = "easy" | "medium" | "hard";
 
 export interface Ingredient {
   item: string;
@@ -32,6 +33,7 @@ export interface MenuRecipe {
   category: CuisineCategory;
   alchoProduct: string;
   useCase: UseCaseType;
+  difficulty: DifficultyLevel;
   servings: string;
   prepTime: string;
   cookTime: string;
@@ -39,6 +41,24 @@ export interface MenuRecipe {
   steps: RecipeStep[];
   businessNotes: BusinessNote[];
 }
+
+export const getDifficultyLabel = (difficulty: DifficultyLevel): string => {
+  const labels: Record<DifficultyLevel, string> = {
+    easy: "Mudah",
+    medium: "Sedang",
+    hard: "Sulit",
+  };
+  return labels[difficulty];
+};
+
+export const getDifficultyColor = (difficulty: DifficultyLevel): string => {
+  const colors: Record<DifficultyLevel, string> = {
+    easy: "bg-green-500/10 text-green-600 border-green-500/30",
+    medium: "bg-amber-500/10 text-amber-600 border-amber-500/30",
+    hard: "bg-red-500/10 text-red-600 border-red-500/30",
+  };
+  return colors[difficulty];
+};
 
 export const menuRecipes: MenuRecipe[] = [
   {
@@ -49,6 +69,7 @@ export const menuRecipes: MenuRecipe[] = [
     category: "local",
     alchoProduct: "Bumbu Nasi Goreng ALCHO",
     useCase: "Cloud Kitchen",
+    difficulty: "easy",
     servings: "10 porsi",
     prepTime: "15 menit",
     cookTime: "20 menit",
@@ -85,6 +106,7 @@ export const menuRecipes: MenuRecipe[] = [
     category: "local",
     alchoProduct: "Bumbu Rendang ALCHO",
     useCase: "Restoran",
+    difficulty: "hard",
     servings: "15 porsi",
     prepTime: "20 menit",
     cookTime: "3 jam",
@@ -122,6 +144,7 @@ export const menuRecipes: MenuRecipe[] = [
     category: "local",
     alchoProduct: "Bumbu Soto ALCHO",
     useCase: "Katering",
+    difficulty: "medium",
     servings: "20 porsi",
     prepTime: "30 menit",
     cookTime: "1 jam",
@@ -158,6 +181,7 @@ export const menuRecipes: MenuRecipe[] = [
     category: "international",
     alchoProduct: "Saus BBQ ALCHO",
     useCase: "Cloud Kitchen",
+    difficulty: "easy",
     servings: "10 porsi",
     prepTime: "15 menit + marinasi",
     cookTime: "25 menit",
@@ -192,6 +216,7 @@ export const menuRecipes: MenuRecipe[] = [
     category: "local",
     alchoProduct: "Bumbu Gulai ALCHO",
     useCase: "Katering",
+    difficulty: "hard",
     servings: "20 porsi",
     prepTime: "25 menit",
     cookTime: "2 jam",
@@ -228,6 +253,7 @@ export const menuRecipes: MenuRecipe[] = [
     category: "local",
     alchoProduct: "Sambal Matah ALCHO",
     useCase: "Restoran",
+    difficulty: "medium",
     servings: "10 porsi",
     prepTime: "30 menit",
     cookTime: "45 menit",
@@ -262,6 +288,7 @@ export const menuRecipes: MenuRecipe[] = [
     category: "local",
     alchoProduct: "Bumbu Nasi Goreng ALCHO",
     useCase: "Cloud Kitchen",
+    difficulty: "medium",
     servings: "10 porsi",
     prepTime: "20 menit",
     cookTime: "15 menit",
@@ -300,6 +327,7 @@ export const menuRecipes: MenuRecipe[] = [
     category: "international",
     alchoProduct: "Saus Teriyaki ALCHO",
     useCase: "Cloud Kitchen",
+    difficulty: "easy",
     servings: "10 porsi",
     prepTime: "15 menit",
     cookTime: "20 menit",
@@ -336,6 +364,7 @@ export const menuRecipes: MenuRecipe[] = [
     category: "international",
     alchoProduct: "Saus Tiram ALCHO",
     useCase: "Katering",
+    difficulty: "easy",
     servings: "15 porsi",
     prepTime: "20 menit",
     cookTime: "15 menit",
@@ -373,6 +402,7 @@ export const menuRecipes: MenuRecipe[] = [
     category: "local",
     alchoProduct: "Sambal Bajak ALCHO",
     useCase: "Katering",
+    difficulty: "medium",
     servings: "20 porsi",
     prepTime: "30 menit",
     cookTime: "30 menit",
@@ -410,6 +440,7 @@ export const menuRecipes: MenuRecipe[] = [
     category: "local",
     alchoProduct: "Sambal Pedas ALCHO",
     useCase: "Restoran",
+    difficulty: "medium",
     servings: "10 porsi",
     prepTime: "20 menit",
     cookTime: "35 menit",
@@ -448,6 +479,7 @@ export const menuRecipes: MenuRecipe[] = [
     category: "international",
     alchoProduct: "Sambal Matah ALCHO",
     useCase: "Restoran",
+    difficulty: "medium",
     servings: "10 porsi",
     prepTime: "15 menit",
     cookTime: "20 menit",

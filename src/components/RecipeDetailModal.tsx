@@ -1,4 +1,4 @@
-import { X, Clock, Users, ChefHat, Lightbulb, Check } from "lucide-react";
+import { X, Clock, Users, ChefHat, Lightbulb, Check, Gauge } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -9,7 +9,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { MenuRecipe, getCategoryLabel } from "@/data/menuInspiration";
+import { MenuRecipe, getCategoryLabel, getDifficultyLabel, getDifficultyColor } from "@/data/menuInspiration";
 import { generateWhatsAppLink } from "@/data/products";
 
 interface RecipeDetailModalProps {
@@ -70,7 +70,7 @@ const RecipeDetailModal = ({ recipe, isOpen, onClose }: RecipeDetailModalProps) 
             </SheetHeader>
 
             {/* Quick Info */}
-            <div className="grid grid-cols-3 gap-4 py-4 bg-muted/50 rounded-lg px-4">
+            <div className="grid grid-cols-4 gap-3 py-4 bg-muted/50 rounded-lg px-4">
               <div className="text-center">
                 <Clock className="w-5 h-5 mx-auto mb-1 text-primary" />
                 <p className="text-xs text-muted-foreground">Prep</p>
@@ -81,10 +81,20 @@ const RecipeDetailModal = ({ recipe, isOpen, onClose }: RecipeDetailModalProps) 
                 <p className="text-xs text-muted-foreground">Masak</p>
                 <p className="text-sm font-medium">{recipe.cookTime}</p>
               </div>
-              <div className="text-center">
+              <div className="text-center border-r border-border">
                 <Users className="w-5 h-5 mx-auto mb-1 text-primary" />
                 <p className="text-xs text-muted-foreground">Porsi</p>
                 <p className="text-sm font-medium">{recipe.servings}</p>
+              </div>
+              <div className="text-center">
+                <Gauge className="w-5 h-5 mx-auto mb-1 text-primary" />
+                <p className="text-xs text-muted-foreground">Level</p>
+                <Badge 
+                  variant="outline" 
+                  className={`text-xs px-2 py-0.5 ${getDifficultyColor(recipe.difficulty)}`}
+                >
+                  {getDifficultyLabel(recipe.difficulty)}
+                </Badge>
               </div>
             </div>
 
